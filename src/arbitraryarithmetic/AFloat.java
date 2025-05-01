@@ -1,14 +1,22 @@
+/*This is the AFloat class in a package called arbitraryarithmetic.
+ * It is being used for arbitrary arithmetic p[recison on float numbers.
+ * The floats are being represented as strings
+ */
 package arbitraryarithmetic;
 
 public class AFloat {
     private String value;
+
+    // an instance variable to keep sign
     private boolean isnegative;
 
+    // default constructor initialises to "0.0"
     public AFloat() {
         this.value = "0.0";
         this.isnegative = false;
     }
 
+    // constructor to instantiate
     public AFloat(String s) {
 
         if (s == null || s.isEmpty()) {
@@ -20,6 +28,7 @@ public class AFloat {
         if (s.equals("-")) {
             throw new IllegalArgumentException("Invalid input: '-' given");
         }
+        // removing sign
 
         if (s.charAt(0) == '-') {
             isnegative = true;
@@ -29,7 +38,7 @@ public class AFloat {
         if (s.isEmpty() || s.equals(".")) {
             throw new IllegalArgumentException("Invalid input after removing '-'");
         }
-    
+        // checking if each character is a digit 
         int dot_count = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
@@ -39,7 +48,7 @@ public class AFloat {
             else if (c == '.') {
                 dot_count++;
                 if (dot_count > 1) {
-                    throw new IllegalArgumentException("Invalid : multiple decimal points");
+                    throw new IllegalArgumentException("Invalid : multiple decimal points"); // more than one decimal 
                 }
             } else {
                 throw new IllegalArgumentException("Invalid character:  " + c);
@@ -63,11 +72,11 @@ public class AFloat {
         if (s.equals("0.0")) {
             isnegative = false; 
         }
-    
+        // reassigning sign
         this.value = isnegative ? "-" + s : s;
     }
     
-
+    // copy constructor 
     public AFloat(AFloat obj){
           this.value = obj.value;
           this.isnegative = obj.isnegative;
@@ -77,6 +86,7 @@ public class AFloat {
             return new AFloat(s);
      }
      
+     // getter methods
      public String get_value() {
         return this.value;
     }
@@ -86,6 +96,7 @@ public class AFloat {
 
 //  Helper Functions 
 
+// Mehod to remove leading zeros
 public static String remove_front_zeros(String s) {
     if (s == null || s.isEmpty()) return "0";
 
@@ -106,9 +117,12 @@ public static String remove_front_zeros(String s) {
     return isnegative ? "-" + s : s;
 }
 
+// method to remove trailing zeros 
+
 public static String remove_end_zeros(String s) {
     if (s == null || s.isEmpty()) return "0.0";
 
+    // adds a decimal point 
     if (!s.contains(".")) return s + ".0";
 
     int i = s.length() - 1;
@@ -128,6 +142,7 @@ public static String remove_end_zeros(String s) {
     return s;
 }
 
+// Method to align both strings to same length 
 private static String[] pad_float(String a, String b) {
     if (!a.contains(".")) {
         a += ".0";
@@ -135,7 +150,7 @@ private static String[] pad_float(String a, String b) {
     if (!b.contains(".")) {
         b += ".0";
     }
-
+    // separate fractional and integer parts
     String[] a_parts = a.split("\\.");
     String[] b_parts = b.split("\\.");
 
@@ -144,13 +159,14 @@ private static String[] pad_float(String a, String b) {
     String int_part2 = b_parts[0];
     String frac_part2 = b_parts.length > 1 ? b_parts[1] : "0";
 
+    // adding leading zeros
     while (int_part1.length() < int_part2.length()) {
         int_part1 = "0" + int_part1;
     }
     while (int_part2.length() < int_part1.length()) {
         int_part2 = "0" + int_part2;
     }
-
+    // adding trailing zeros
     while (frac_part1.length() < frac_part2.length()) {
         frac_part1 += "0";
     }
@@ -161,6 +177,7 @@ private static String[] pad_float(String a, String b) {
     String final_1 = int_part1 + frac_part1;
     String final_2 = int_part2 + frac_part2;
 
+    // an array to store the padded strings and number of decimal places
     return new String[] {final_1, final_2, String.valueOf(frac_part1.length())};
 }
  
@@ -171,7 +188,8 @@ private static String insert_decimalpoint(String s, int decimal_places) {
     int index = s.length() - decimal_places;
     return s.substring(0, index) + "." + s.substring(index);
 }
-  
+
+// Method returns true if a  is smaller 
 private static boolean is_smaller(String a, String b) {
     
     for (int i = 0; i < a.length(); i++) {
@@ -181,7 +199,7 @@ private static boolean is_smaller(String a, String b) {
     return false; 
 }
 
-// truncation
+// tMethod to truncate 
 
 public static String truncate(String result) {
     if (result == null || result.isEmpty()) return "0.0";
@@ -190,7 +208,8 @@ public static String truncate(String result) {
     String[] parts = result.split("\\.");
     String intPart = parts[0];
     String fracPart = parts.length > 1 ? parts[1] : "";
-
+    
+    // if decimal part less than 30 appends zeros and if more than it truncates to first 30 digits.
     while (fracPart.length() < 30) fracPart += "0";
     if (fracPart.length() > 30) fracPart = fracPart.substring(0, 30);
 
