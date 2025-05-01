@@ -1,0 +1,41 @@
+<project name="ArbitraryArithmetic" default="all" basedir=".">
+
+    <property name="src.dir" value="src" />
+    <property name="build.dir" value="build" />
+    <property name="jar.name" value="arbitraryarithmetic/aarithmetic.jar" />
+
+    <target name="clean">
+        <delete dir="${build.dir}" />
+        <!-- Removed deletion of dist.dir since we're not using it -->
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}" destdir="${build.dir}" includeantruntime="false">
+            <include name="arbitraryarithmetic/*.java" />
+            <include name="MyInfArith.java" />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <jar destfile="${jar.name}" basedir="${build.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="MyInfArith" />
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run" depends="compile">
+        <java classname="MyInfArith" fork="true" classpath="${build.dir}">
+            <arg value="${arg1}" />
+            <arg value="${arg2}" />
+            <arg value="${arg3}" />
+            <arg value="${arg4}" />
+        </java>
+    </target>
+
+    <target name="all" depends="clean, jar" />
+
+</project>
+
+
