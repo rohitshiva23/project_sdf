@@ -40,7 +40,8 @@ public class AInteger {
         if (s.length() == 0) {
             throw new IllegalArgumentException("Invalid input :'-' is not a valid number.");
         }
-    
+
+        // checks each character if it is a digit
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (c < '0' || c > '9') {
@@ -82,7 +83,7 @@ public static String remove_front_zeros(String s) {
     if (isnegative) {
         s = s.substring(1);
     }
-
+    // skip over all front zeros except last digit
     int i = 0;
     while (i < s.length() - 1 && s.charAt(i) == '0') i++;
     s = s.substring(i);
@@ -100,11 +101,13 @@ public static String[] padzeros(String a, String b) {
     int len1 = a.length();
     int len2 = b.length();
 
+    // pad a if it shorter
     while (len1 < len2) {
         a = "0" + a;
         len1++;
     }
 
+    // pad b if it shorter
     while (len2 < len1) {
         b = "0" + b;
         len2++;
@@ -125,7 +128,7 @@ public static boolean isSmaller(String a, String b) {
     if (len1 < len2) return true;
     if (len1 > len2) return false;
 
- // checking digit by digit for equal length ones   
+ // checking digit by digit for equal length ones from leftmost  
     for (int i = 0; i < len1; i++) {
         if (a.charAt(i) < b.charAt(i)) return true;
         if (a.charAt(i) > b.charAt(i)) return false;
@@ -144,10 +147,12 @@ public static String addstr(String a, String b) {
     int carry = 0;
     String result = "";
 
+    // coverts charcters to digits from rightmost to left of string
     for (int i = a.length() - 1; i >= 0; i--) {
-        int digit1 = a.charAt(i) - '0';
+        int digit1 = a.charAt(i) - '0';    // coverts char into integers
         int digit2 = b.charAt(i) - '0';
-
+    
+    // actual addition logic
         int sum = digit1 + digit2 + carry;
         int digit = sum % 10;
         carry = sum / 10;
@@ -155,7 +160,6 @@ public static String addstr(String a, String b) {
         result = digit + result;
     }
 // if any extra digit is left at end 
-
     if (carry > 0) {
         result = carry + result;
     }
@@ -173,11 +177,12 @@ public static String subtractstr(String a, String b) {
     String result = "";
     int borrow = 0;
 
+    // iterates from rightmost character of string
     for (int i = a.length() - 1; i >= 0; i--) {
-        int digit1 = a.charAt(i) - '0' - borrow;
+        int digit1 = a.charAt(i) - '0' - borrow; // covert them into integers
         int digit2 = b.charAt(i) - '0';
 
-        if (digit1 < digit2) {
+        if (digit1 < digit2) {     // we borrow a one from next digit and add it
             digit1 += 10;
             borrow = 1;
         } else {
@@ -185,7 +190,7 @@ public static String subtractstr(String a, String b) {
         }
 
         int digit = digit1 - digit2;
-        result = digit + result;
+        result = digit + result;  // append each digit to string
     }
 
     return remove_front_zeros(result);
@@ -206,21 +211,24 @@ public AInteger add(AInteger other) {
         String sum = addstr(amod, bmod) ;        // we simply add their magnitudes
         AInteger result = new AInteger(sum);
 
-        result.isnegative = this.isnegative && !sum.equals("0"); // assign sign of either one 
-        result.value = result.isnegative ? "-" + sum : sum;
+        // overriding sign as initally sign would always be +
+        result.isnegative = this.isnegative && !sum.equals("0");   // assign sign of either one 
+        result.value = result.isnegative ? "-" + sum : sum;        // changing value based on sign
         return result;
     } 
  // If both numbers are of opposite sign
 
     else {
-        boolean aisBigger = !isSmaller(amod, bmod);  // check which one is smaller magnitude based 
+        boolean aisBigger = !isSmaller(amod, bmod);  // returns true if a is bigger in magnitude 
         String diff = aisBigger ? subtractstr(amod, bmod) : subtractstr(bmod, amod);   // subtract smaller one from larger
 
         AInteger result = new AInteger(diff);
+
+        // overriding the sign 
         if (diff.equals("0")) {
             result.isnegative = false;
         } else {
-            result.isnegative = aisBigger ? this.isnegative : other.isnegative; // assign sign of larger one
+            result.isnegative = aisBigger ? this.isnegative : other.isnegative;      // assign sign of larger one
             result.value = result.isnegative ? "-" + diff : diff;
         }
         return result;
@@ -256,7 +264,7 @@ public AInteger subtract(AInteger other) {
             result.isnegative = aisBigger ? this.isnegative : !this.isnegative; // assign sign of a if is bigger reverse if not 
         }
 
-        result.value = result.isnegative ? "-" + diff : diff; 
+        result.value = result.isnegative ? "-" + diff : diff; // value gets added the sign
         return result;
     }
 
@@ -267,7 +275,7 @@ public AInteger subtract(AInteger other) {
         String sum = addstr(amod, bmod);
         AInteger result = new AInteger(sum);
 
-        // assign sign of a 
+        // overrride sign by assigning sign of a 
         result.isnegative = this.isnegative;
         result.value = result.isnegative ? "-" + sum : sum ;
         return result ;
@@ -277,16 +285,17 @@ public AInteger subtract(AInteger other) {
 // Helper functions for multiplication
 
 // Multiplies a string with a single digit 
+
 public static String digit_wise_multiply(String num, char digit_char) {
 
-    int digit = digit_char - '0'; 
+    int digit = digit_char - '0'; // Converts the digit_char to its integer value
     int carry = 0;
     String result = "";
 
     for (int i = num.length() - 1; i >= 0; i--) {
 
         int current = num.charAt(i) - '0'; 
-        int product  = current * digit + carry; 
+        int product  = current * digit + carry; // multiply from leftmost digit of string
 
         int result_digit = product % 10; 
         carry = product / 10;           
@@ -295,7 +304,7 @@ public static String digit_wise_multiply(String num, char digit_char) {
     }
 
     if (carry > 0) {
-        result = carry + result;
+        result = carry + result;     // append final digit if leftover
     }
 
     return remove_front_zeros(result);
@@ -307,7 +316,7 @@ public static String multiplystr(String a, String b) {
     a = remove_front_zeros(a);
     b = remove_front_zeros(b);
 
-    if (a.equals("0") || b.equals("0")) return "0";
+    if (a.equals("0") || b.equals("0")) return "0"; // one of the inputs is zero
 
     String result = "0";       
     int zeros_to_align = 0;         
@@ -316,15 +325,15 @@ public static String multiplystr(String a, String b) {
     for (int i = b.length() - 1; i >= 0; i--) {
 
         char digit = b.charAt(i); 
-        String partial_product = digit_wise_multiply(a, digit);
+        String partial_product = digit_wise_multiply(a, digit); // multiply entire a by each digit of b
  
         for (int j = 0; j < zeros_to_align; j++) {
-            partial_product += "0";
+            partial_product += "0";                         // multiplying partial products by factor of ten
         }
 
-        result = addstr(result, partial_product);
+        result = addstr(result, partial_product);  // adding the partial products to final result using addstr logic
         
-        zeros_to_align ++;
+        zeros_to_align ++;                         // adds zero as goes from right to left as place value increases
     }
 
     return remove_front_zeros(result);
@@ -345,10 +354,12 @@ public AInteger multiply(AInteger other) {
 
     // adding the sign infront of result 
 
+    // assign - if both have opposite signs
     if ((this.isnegative != other.isnegative) && !result_zero) {
         result.isnegative = true;
         result.value = "-" + product;
     } 
+    // assign + if same sign
     else {
         result.isnegative = false;
         result.value = product;
@@ -361,10 +372,12 @@ public AInteger multiply(AInteger other) {
 
 public static String dividestr(String dividend, String divisor) {
 
+    // Check for division by zero
     if (divisor.equals("0")) {
         throw new ArithmeticException("Division by zero");
     }
-    
+
+    // If dividend is smaller than divisor, quotient is 0
     if (isSmaller(dividend, divisor)) {
         return "0";
     }
@@ -375,26 +388,26 @@ public static String dividestr(String dividend, String divisor) {
     int index = 0;
 
     while (index < dividend.length()) {
-        current += dividend.charAt(index);
+        current += dividend.charAt(index); // bring down each char of dividend
         
         current = remove_front_zeros(current);
 
-        if (current.equals("") || isSmaller(current, divisor)) {
+        if (current.equals("") || isSmaller(current, divisor)) {   // if current is smaller than dividend add zero to quotient
             quotient += "0";
         } 
         else {
             int count = 0;
             while (!isSmaller(current, divisor)) {
-                current = AInteger.subtractstr(current, divisor);
+                current = AInteger.subtractstr(current, divisor); // subtract divisor from current till it becomes larger than it division as repeated subtraction
                 current = remove_front_zeros(current);
-                count++;
+                count++;                                        // gives the digit to append the quotient
             }
             quotient += (char)(count + '0'); 
         }
         index++;
     }
 
-    quotient = remove_front_zeros(quotient);
+    quotient = remove_front_zeros(quotient); // appending it as a char
     return quotient;
 }
 
@@ -402,15 +415,19 @@ public static String dividestr(String dividend, String divisor) {
 
 public AInteger divide(AInteger other) {
 
+    // Handle division by zero
     if (other.value.equals("0")) {
         throw new ArithmeticException("Division by zero");
     }
 
+    // Remove signs from both numbers
     String amod = this.value.replace("-", "");
     String bmod = other.value.replace("-", "");
 
+    // Calculate the magnitude of the quotient
     String result_str = dividestr(amod, bmod);
 
+    // assign - if signs are opposite and + if same sign
     boolean result_negative = (this.isnegative != other.isnegative) && !result_str.equals("0");
 
     if (result_negative) {
