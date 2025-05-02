@@ -1,5 +1,5 @@
 /* This is the AInteger class in a package called arbitrarayarithmetic.
- * It is being used for arbitrary arithmetic p[recison on integers.
+ * It is being used for arbitrary arithmetic precision on integers.
  * The integers are being represented as strings.
  */
 
