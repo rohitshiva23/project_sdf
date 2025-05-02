@@ -35,15 +35,15 @@ The makefile  compiles the .java files into .class files into the build director
 
 WAYS TO RUN THE PROGRAM :  
 
-This can be done in 3 ways to verify the program  \\
+This can be done in 3 ways to verify the program  
 
-1) using the main class itself : java MyInfArith float mul 2.5 2.0 \\
-                                  5.0 \\
+1) using the main class itself : java MyInfArith float mul 2.5 2.0 
+                                  5.0 
 
-2) using the python script : python3 runproject.py int add 3 4 \\
-                              7\\
+2) using the python script : python3 runproject.py int add 3 4 
+                              7
                               
-3) using ant run command : ant run -Darg1=float -Darg2=add -Darg3=100.5 -Darg4=3.25 \\
+3) using ant run command : ant run -Darg1=float -Darg2=add -Darg3=100.5 -Darg4=3.25 
 
-103.75 \\
+103.75 
 
