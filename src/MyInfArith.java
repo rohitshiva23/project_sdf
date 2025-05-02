@@ -4,21 +4,21 @@ import arbitraryarithmetic.AFloat;
 public class MyInfArith {
     public static void main(String[] args) {
         if (args.length != 4) {
-            System.out.println("Usage: java MyInfArith [int|float] [add|sub|mul|div] num1 num2");
+            System.out.println("Usage: Minimum 4 arguments are to be passed");
             return;
         }
 
-        String type = args[0].toLowerCase();
-        String operation = args[1].toLowerCase();
+        String type = args[0];
+        String operation = args[1];
         String num1 = args[2];
         String num2 = args[3];
 
         try {
             if (type.equals("int")) {
-                handleIntegerOperation(operation, num1, num2);
+                do_integer_operation(operation, num1, num2);
             } 
             else if (type.equals("float")) {
-                handleFloatOperation(operation, num1, num2);
+                do_float_operation(operation, num1, num2);
             } 
             else {
                 System.out.println("Invalid type. Use 'int' or 'float'.");
@@ -30,7 +30,7 @@ public class MyInfArith {
         }
     }
 
-    private static void handleIntegerOperation(String operation, String num1, String num2) {
+    private static void do_integer_operation(String operation, String num1, String num2) {
         AInteger a = new AInteger(num1);
         AInteger b = new AInteger(num2);
         AInteger result = null;
@@ -49,14 +49,14 @@ public class MyInfArith {
                 result = a.divide(b);
                 break;
             default:
-                System.out.println("Invalid operation for int type. Use add, sub, mul, or div.");
+                System.out.println("Invalid operation for int type.");
                 return;
         }
 
         System.out.println(result.get_value());
     }
 
-    private static void handleFloatOperation(String operation, String num1, String num2) {
+    private static void do_float_operation(String operation, String num1, String num2) {
         AFloat a = new AFloat(num1);
         AFloat b = new AFloat(num2);
         AFloat result = null;
@@ -72,10 +72,10 @@ public class MyInfArith {
                 result = a.multiply(b);
                 break;
             case "div":
-                result = a.divide(b);  // Now dividing floats is properly implemented
+                result = a.divide(b);  
                 break;
             default:
-                System.out.println("Invalid operation for float type. Use add, sub, mul, or div.");
+                System.out.println("Invalid operation for float type.");
                 return;
         }
 
